@@ -9,3 +9,10 @@
 </IfModule>
 RedirectMatch 404 /\.git
 Options -Indexes
+
+# Sempre buscar a versão mais nova do app (evita cópia antiga em cache)
+<IfModule mod_headers.c>
+  <FilesMatch "\.(html|php)$">
+    Header set Cache-Control "no-cache, no-store, must-revalidate"
+  </FilesMatch>
+</IfModule>
