@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TEACHER EBD</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+<style>
+:root{
+  --bg:#f6f2ea; --card:#fffdf8; --ink:#1f2a37; --muted:#6b7280; --line:#e6dfd2;
+  --brand:#7a1f2b; --brand2:#a8323f; --gold:#b8892d; --soft:#f3e7d3; --ok:#2f7a4f;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,sans-serif;font-size:16px;line-height:1.55}
+h1,h2,h3{font-family:Fraunces,Georgia,serif;line-height:1.2;margin:0 0 .5rem}
+header{background:var(--brand);color:#fff;padding:22px 20px}
+header .wrap{display:flex;align-items:center;gap:14px}
+header .logo{width:46px;height:46px;border-radius:12px;background:var(--gold);display:grid;place-items:center;font-family:Fraunces,serif;font-weight:700;font-size:20px;color:var(--brand)}
+header h1{font-size:1.6rem;margin:0}
+header p{margin:2px 0 0;opacity:.85;font-size:.95rem}
+.wrap{max-width:1080px;margin:0 auto}
+main{padding:20px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;margin-bottom:18px}
+.steps{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.step{flex:1;min-width:150px;padding:10px 12px;border-radius:10px;background:#efe8db;color:var(--muted);font-size:.9rem;font-weight:500}
+.step.on{background:var(--brand);color:#fff}
+.step.done{background:var(--soft);color:var(--brand)}
+label{display:block;font-weight:600;font-size:.9rem;margin:0 0 6px}
+input[type=text],input[type=number],select,textarea{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;font:inherit;background:#fff;color:var(--ink)}
+textarea{min-height:120px;resize:vertical}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.btn{display:inline-flex;align-items:center;gap:8px;border:0;border-radius:10px;padding:11px 18px;font:inherit;font-weight:600;cursor:pointer;background:var(--brand);color:#fff}
+.btn:hover{background:var(--brand2)}
+.btn.sec{background:#fff;color:var(--brand);border:1px solid var(--brand)}
+.btn.sm{padding:7px 12px;font-size:.88rem}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.drop{border:2px dashed #cdbfa6;border-radius:14px;padding:28px;text-align:center;background:#fbf7ef;cursor:pointer}
+.drop.hover{background:var(--soft);border-color:var(--brand)}
+.muted{color:var(--muted);font-size:.92rem}
+.pill{display:inline-block;padding:3px 10px;border-radius:99px;background:var(--soft);color:var(--brand);font-size:.82rem;font-weight:600;margin:2px 4px 2px 0}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;position:sticky;top:0;background:var(--bg);padding:8px 0;z-index:5}
+.tab{border:1px solid var(--line);background:#fff;border-radius:99px;padding:7px 14px;font:inherit;font-size:.9rem;cursor:pointer;color:var(--ink)}
+.tab.on{background:var(--brand);color:#fff;border-color:var(--brand)}
+.tab .dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#d1c7b4;margin-left:6px;vertical-align:middle}
+.tab .dot.ok{background:var(--ok)}
+.tab .dot.load{background:var(--gold);animation:pulse 1s infinite}
+@keyframes pulse{50%{opacity:.3}}
+.panel{display:none}.panel.on{display:block}
+.sec-title{color:var(--brand);font-size:1.15rem;margin:18px 0 8px}
+ul.clean{padding-left:20px;margin:6px 0}
+.box{background:#fbf7ef;border-left:4px solid var(--gold);padding:12px 14px;border-radius:8px;margin:10px 0}
+.timeline{position:relative;padding-left:24px;border-left:3px solid var(--soft);margin-left:6px}
+.tl{position:relative;margin:0 0 14px}
+.tl:before{content:"";position:absolute;left:-32px;top:5px;width:13px;height:13px;border-radius:50%;background:var(--muted)}
+.tl.durante:before{background:var(--brand)}
+.tl.depois:before{background:var(--gold)}
+.tl b{color:var(--brand)}
+.word{display:inline-block;border:1px solid var(--line);border-radius:10px;padding:8px 10px;margin:4px 6px 4px 0;background:#fff;font-size:.92rem}
+.qa{border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:8px 0;background:#fff}
+.qa details summary{cursor:pointer;color:var(--brand);font-size:.88rem;margin-top:4px}
+.plan{width:100%;border-collapse:collapse;font-size:.95rem}
+.plan td,.plan th{border-bottom:1px solid var(--line);padding:9px 8px;text-align:left;vertical-align:top}
+.plan th{color:var(--muted);font-weight:600;font-size:.82rem;text-transform:uppercase}
+.mins{font-weight:700;color:var(--brand);white-space:nowrap}
+.loading{padding:30px;text-align:center;color:var(--muted)}
+.spinner{width:28px;height:28px;border:3px solid var(--soft);border-top-color:var(--brand);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 10px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.err{background:#fde8e8;color:#8a1c1c;padding:12px;border-radius:10px;margin:10px 0}
+.slides-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+.thumb{aspect-ratio:16/9;background:var(--brand);color:#fff;border-radius:10px;padding:12px;overflow:hidden;cursor:pointer;font-size:.72rem;position:relative}
+.thumb h4{font-family:Fraunces,serif;font-size:.95rem;margin:0 0 6px;color:#f3d796}
+.thumb .n{position:absolute;right:8px;bottom:6px;opacity:.6}
+#presenter{position:fixed;inset:0;background:#2a0d12;color:#fff;z-index:50;display:none;flex-direction:column}
+#presenter.on{display:flex}
+#slide{flex:1;display:flex;flex-direction:column;justify-content:center;padding:6vh 8vw}
+#slide h2{font-size:clamp(28px,5vw,64px);color:#f3d796;margin-bottom:3vh}
+#slide ul{font-size:clamp(18px,2.6vw,36px);line-height:1.45;padding-left:1.2em}
+#slide .ref{margin-top:3vh;font-size:clamp(14px,1.8vw,24px);opacity:.75;font-style:italic}
+#pbar{display:flex;justify-content:space-between;align-items:center;padding:12px 20px;background:rgba(0,0,0,.25)}
+#pbar button{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.4);border-radius:8px;padding:8px 14px;font:inherit;cursor:pointer}
+#pnote{font-size:.9rem;opacity:.8;max-width:60%}
+.chat{display:flex;flex-direction:column;gap:10px;max-height:460px;overflow:auto;padding:4px}
+.msg{padding:10px 14px;border-radius:12px;max-width:85%;white-space:pre-wrap}
+.msg.u{align-self:flex-end;background:var(--brand);color:#fff}
+.msg.a{align-self:flex-start;background:#fff;border:1px solid var(--line)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.chip{border:1px solid var(--line);background:#fff;border-radius:99px;padding:6px 12px;font-size:.85rem;cursor:pointer}
+.chip:hover{border-color:var(--brand);color:var(--brand)}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+svg.map{width:100%;height:auto;background:#eaf1f4;border-radius:12px;border:1px solid var(--line)}
+.hidden{display:none!important}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 18px;border-radius:10px;z-index:60;font-size:.9rem}
+.nav{background:#5e1520;color:#fff}
+.nav .wrap{display:flex;align-items:center;gap:6px;padding:8px 20px;flex-wrap:wrap}
+.nav button{background:transparent;border:0;color:#f3e7d3;font:inherit;font-weight:600;padding:8px 12px;border-radius:8px;cursor:pointer}
+.nav button.on{background:rgba(255,255,255,.15);color:#fff}
+.nav .who{margin-left:auto;font-size:.88rem;opacity:.9;display:flex;align-items:center;gap:8px}
+.nav .who button{font-weight:500;padding:6px 10px;border:1px solid rgba(255,255,255,.35)}
+.post{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:12px}
+.post h3{font-family:Inter,sans-serif;font-size:1.05rem;margin:6px 0}
+.post .meta{color:var(--muted);font-size:.85rem}
+.post .body{white-space:pre-wrap;margin:8px 0}
+.post .acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.post .acts button{border:1px solid var(--line);background:#fbf7ef;border-radius:99px;padding:6px 12px;font:inherit;font-size:.86rem;cursor:pointer;color:var(--ink)}
+.post .acts button.liked{background:var(--soft);color:var(--brand);border-color:var(--brand)}
+.coms{margin-top:10px;border-top:1px solid var(--line);padding-top:10px}
+.com{font-size:.92rem;margin:6px 0;padding:8px 10px;background:#fbf7ef;border-radius:10px}
+.t-ideia{background:#e8f3ec;color:#2f7a4f}.t-duvida{background:#fdf0dc;color:#8a5a12}.t-experiencia{background:#e7eef8;color:#2f4f8a}.t-aula{background:var(--soft);color:var(--brand)}
+.authbox{max-width:420px;width:100%;margin:0}
+.authtabs{display:flex;gap:6px;margin:10px 0 14px}
+.authtabs button{flex:1;border:1px solid var(--line);background:#fff;border-radius:10px;padding:9px;font:inherit;font-weight:600;cursor:pointer;color:var(--ink)}
+.authtabs button.on{background:var(--brand);color:#fff;border-color:var(--brand)}
+.authbox input{margin-bottom:10px}
+table.adm{width:100%;border-collapse:collapse;font-size:.9rem}
+table.adm td,table.adm th{border-bottom:1px solid var(--line);padding:8px 6px;text-align:left;vertical-align:top}
+.tools{margin-top:18px;border-top:1px dashed var(--line);padding-top:12px}
+.nota{background:#fff8e6;border-left:4px solid var(--gold);padding:10px 12px;border-radius:8px;white-space:pre-wrap;margin-bottom:10px}
+.sl{display:flex;flex-direction:column;gap:6px}
+.sl .ctr{display:flex;gap:4px;justify-content:center}
+.sl .ctr button{border:1px solid var(--line);background:#fff;border-radius:8px;padding:4px 8px;cursor:pointer;font-size:.85rem}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:85;display:flex;align-items:center;justify-content:center;padding:20px}
+.modal .card{max-width:560px;width:100%;margin:0;max-height:90vh;overflow:auto}
+.modal label{margin-top:10px}
+#saveState{font-size:.85rem;color:var(--muted)}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.pgc{border:2px solid var(--line);border-radius:10px;padding:6px;background:#fff;text-align:center;font-size:.8rem}
+.pgc.ini{border-color:var(--ok)}.pgc.fim{border-color:var(--brand)}.pgc.in{background:#f3faf5}
+.pgc canvas{width:100%;height:auto;background:#f4f4f4;border-radius:6px;min-height:190px}
+.pgc .pt{color:var(--muted);font-size:.75rem;height:3.2em;overflow:hidden;text-align:left;margin:4px 0}
+.pgc button{border:1px solid var(--line);background:#fbf7ef;border-radius:6px;padding:3px 6px;font-size:.75rem;cursor:pointer;margin:2px}
+.modal .card.wide{max-width:1000px}
+.modal .card.wide>.row:first-child{position:sticky;top:-20px;background:var(--card);z-index:2;padding:10px 0;margin-top:-10px}
+@media print{header,.tabs,.btn,.steps{display:none}}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <div class="logo">EBD</div>
+  <div><h1>TEACHER EBD <span style="font-family:Inter,sans-serif;font-size:.7rem;font-weight:600;background:#b8892d;color:#2a0d12;padding:3px 9px;border-radius:99px;vertical-align:middle;letter-spacing:.03em">VERSÃO DE TESTE</span></h1><p>Seu assistente inteligente de preparação e ensino bíblico</p></div>
+</div></header>
+<nav class="nav hidden" id="nav"><div class="wrap">
+  <button data-v="preparar" class="on">📚 Preparar aula</button>
+  <button data-v="minhas">📁 Minhas aulas</button>
+  <button data-v="sala">👥 Sala dos Professores</button>
+  <button data-v="admin" id="navAdmin" class="hidden">⚙️ Professores</button>
+  <span class="who"><span id="whoName"></span><button id="btnSenha">Trocar senha</button><button id="btnSair">Sair</button></span>
+</div></nav>
+
+<main class="wrap">
+  <div class="box" style="margin-top:0;margin-bottom:16px">🧪 <b>Versão de teste.</b> Este app ainda está em desenvolvimento. Confira sempre o conteúdo gerado com a revista e a Bíblia, e envie suas sugestões ao responsável pelo projeto.</div>
+<div id="viewPreparar">
+  <div class="steps">
+    <div class="step on" id="st1">1. Revista</div>
+    <div class="step" id="st2">2. Lição</div>
+    <div class="step" id="st3">3. Personalizar</div>
+    <div class="step" id="st4">4. Materiais</div>
+  </div>
+
+  <!-- ETAPA 1 -->
+  <section class="card" id="sec1">
+    <h2>1. Envie a revista</h2>
+    <p class="muted">Envie o PDF da revista do trimestre (ou só as páginas da lição). O arquivo é lido aqui mesmo no seu navegador.</p>
+    <div class="grid" style="margin:14px 0">
+      <div><label>Editora</label><input type="text" id="editora" placeholder="Ex.: CPAD"></div>
+      <div><label>Ano</label><input type="number" id="ano" placeholder="2026"></div>
+      <div><label>Trimestre</label><select id="trimestre"><option>1º trimestre</option><option>2º trimestre</option><option>3º trimestre</option><option selected>4º trimestre</option></select></div>
+      <div><label>Classe</label><select id="classe"><option>Adultos</option><option>Jovens</option><option>Adolescentes</option><option>Juniores</option><option>Crianças</option><option>Discipulado / Novos convertidos</option></select></div>
+    </div>
+    <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr))">
+      <div>
+        <label>Opção A — Enviar arquivo</label>
+        <div class="drop" id="drop" style="min-height:190px;display:flex;flex-direction:column;justify-content:center">
+          <div style="font-size:2rem">📄</div>
+          <b>Clique aqui ou arraste o arquivo</b>
+          <div class="muted">PDF, Word (.docx) ou texto (.txt)</div>
+          <input type="file" id="file" accept=".pdf,.docx,.txt,application/pdf,text/plain,application/vnd.openxmlformats-officedocument.wordprocessingml.document" class="hidden">
+        </div>
+      </div>
+      <div>
+        <label>Opção B — Colar o texto da lição</label>
+        <textarea id="pasted" placeholder="Copie o texto da lição (do site, do WhatsApp, do PDF…) e cole aqui." style="min-height:190px"></textarea>
+        <button class="btn sm sec" id="usePasted" style="margin-top:8px">Usar este texto</button>
+      </div>
+    </div>
+    <p id="pdfStatus" class="muted" style="margin-top:10px"></p>
+  </section>
+
+  <!-- ETAPA 2 -->
+  <section class="card hidden" id="sec2">
+    <h2>2. Escolha a lição</h2>
+    <div class="grid">
+      <div><label>Qual lição você vai dar?</label><select id="licao"></select></div>
+      <div><label>Da página</label><input type="number" id="pgIni" min="1"></div>
+      <div><label>Até a página</label><input type="number" id="pgFim" min="1"></div>
+    </div>
+    <p class="muted" id="licaoInfo"></p>
+    <div class="row" style="margin:6px 0 10px"><button class="btn sm sec" id="btnPaginas">🖼️ Ver as páginas da revista</button><button class="btn sm sec" id="btnIAlicoes">🔎 Achar as lições com IA</button></div>
+    <p class="muted" style="font-size:.85rem;margin-top:-4px">✏️ As páginas já vêm preenchidas, mas você pode mudar: por exemplo, para usar só uma parte da lição.</p>
+    <details><summary class="muted" style="cursor:pointer">Ver o texto que será usado</summary><pre id="preview" style="white-space:pre-wrap;font-size:.82rem;max-height:260px;overflow:auto;background:#fbf7ef;padding:10px;border-radius:8px"></pre></details>
+  </section>
+
+  <!-- ETAPA 3 -->
+  <section class="card hidden" id="sec3">
+    <h2>3. Personalize a aula</h2>
+    <div class="grid">
+      <div><label>Duração da aula</label><select id="duracao"><option value="30">30 minutos</option><option value="45" selected>45 minutos</option><option value="60">60 minutos</option><option value="90">90 minutos</option></select></div>
+      <div><label>Profundidade</label><select id="nivel"><option>Básico (linguagem simples)</option><option selected>Intermediário</option><option>Avançado (mais teologia e original)</option></select></div>
+      <div><label>Linha teológica</label><select id="linha"><option selected>Pentecostal clássica (Assembleia de Deus)</option><option>Evangélica geral</option></select></div>
+    </div>
+    <div style="margin-top:14px"><label>Perfil da turma (opcional)</label><input type="text" id="perfil" placeholder="Ex.: muitos novos convertidos, turma de 25 pessoas, maioria casais"></div>
+    <div class="row" style="margin-top:18px">
+      <button class="btn" id="gerar">✨ Preparar minha aula</button>
+      <span class="muted" id="gerarMsg"></span>
+    </div>
+  </section>
+
+  <!-- ETAPA 4 -->
+  <section class="hidden" id="sec4">
+    <div class="row" style="justify-content:space-between;margin-bottom:6px">
+      <h2 id="lessonTitle" style="margin:0">Sua aula</h2>
+      <div class="row"><span id="saveState"></span><button class="btn sm sec" id="btnShare">📤 Compartilhar na Sala</button><button class="btn sm sec" id="copyAll">📋 Copiar tudo</button><button class="btn sm" id="present">▶ Apresentar slides</button></div>
+    </div>
+    <div class="tabs" id="tabs"></div>
+    <div id="panels"></div>
+  </section>
+</div><!-- /viewPreparar -->
+
+<div id="viewSala" class="hidden">
+  <div class="card">
+    <div class="row" style="justify-content:space-between">
+      <div><h2 style="margin:0">👥 Sala dos Professores</h2><p class="muted" style="margin:4px 0 0">Troque ideias, tire dúvidas e compartilhe as aulas preparadas.</p></div>
+      <button class="btn" id="btnNovoPost">✏️ Nova publicação</button>
+    </div>
+    <form id="formPost" class="hidden" style="margin-top:16px">
+      <div class="grid">
+        <div><label>Tipo</label><select id="pTipo"><option value="ideia">💡 Ideia</option><option value="duvida">❓ Dúvida</option><option value="experiencia">🙌 Experiência em sala</option><option value="aula">📖 Aula preparada</option></select></div>
+        <div><label>Lição (opcional)</label><input type="text" id="pLicao" placeholder="Ex.: Lição 8 — 22/11"></div>
+      </div>
+      <div style="margin-top:12px"><label>Título</label><input type="text" id="pTitulo" maxlength="160" placeholder="Resumo em uma frase"></div>
+      <div style="margin-top:12px"><label>Texto</label><textarea id="pTexto" maxlength="8000" placeholder="Escreva sua ideia, dúvida ou experiência…"></textarea></div>
+      <p class="muted" id="pAulaInfo" style="display:none">📎 A aula completa (roteiro, slides, perguntas…) vai junto. Os outros professores poderão abrir e usar.</p>
+      <p class="muted" style="font-size:.82rem">Não cole o texto da revista aqui — compartilhe suas ideias e o material gerado.</p>
+      <div class="row"><button class="btn" type="submit">Publicar</button><button class="btn sec" type="button" id="btnCancelPost">Cancelar</button></div>
+    </form>
+  </div>
+  <div class="row" style="margin-bottom:12px">
+    <input type="text" id="fBusca" placeholder="🔎 Buscar por lição, assunto ou professor" style="flex:2;min-width:200px">
+    <select id="fTipo" style="flex:1;min-width:150px"><option value="">Todos os tipos</option><option value="ideia">💡 Ideias</option><option value="duvida">❓ Dúvidas</option><option value="experiencia">🙌 Experiências</option><option value="aula">📖 Aulas</option></select>
+  </div>
+  <div id="feed"></div>
+  <div style="text-align:center"><button class="btn sec hidden" id="btnMais">Ver mais</button></div>
+</div>
+
+<div id="viewMinhas" class="hidden">
+  <div class="card">
+    <h2>📁 Minhas aulas</h2>
+    <p class="muted">As aulas que você gera ou edita ficam salvas aqui automaticamente.</p>
+    <div id="minhasList"></div>
+  </div>
+</div>
+
+<div id="viewAdmin" class="hidden">
+  <div class="card">
+    <h2>⚙️ Professores cadastrados</h2>
+    <p class="muted">Para convidar um professor, envie o link do app e o <b>código de convite</b> (a senha que está no config.php).</p>
+    <div id="admList" style="overflow-x:auto"></div>
+  </div>
+</div>
+</main>
+
+<div id="login" style="position:fixed;inset:0;background:rgba(42,13,18,.94);z-index:70;display:flex;align-items:center;justify-content:center;padding:20px;overflow:auto">
+  <div class="card authbox">
+    <h2>TEACHER EBD</h2>
+    <p class="muted" style="margin:0">Assistente de preparação de aulas e Sala dos Professores.</p>
+    <div class="authtabs"><button type="button" data-a="entrar" class="on">Entrar</button><button type="button" data-a="cadastrar">Criar conta</button></div>
+    <form id="formEntrar">
+      <input type="email" id="lEmail" placeholder="Seu e-mail" autocomplete="email">
+      <input type="password" id="lSenha" placeholder="Sua senha" autocomplete="current-password">
+      <button class="btn" type="submit" style="width:100%;justify-content:center">Entrar</button>
+      <p class="muted" style="font-size:.82rem;margin:10px 0 0">Esqueceu a senha? Peça ao responsável para gerar uma nova.</p>
+    </form>
+    <form id="formCad" class="hidden">
+      <input type="text" id="cNome" placeholder="Seu nome" autocomplete="name">
+      <input type="text" id="cIgreja" placeholder="Sua igreja / congregação">
+      <input type="email" id="cEmail" placeholder="Seu e-mail" autocomplete="email">
+      <input type="password" id="cSenha" placeholder="Crie uma senha (mín. 6 caracteres)" autocomplete="new-password">
+      <input type="text" id="cConvite" placeholder="Código de convite" autocomplete="off">
+      <button class="btn" type="submit" style="width:100%;justify-content:center">Criar minha conta</button>
+    </form>
+    <p id="loginErr" style="color:#8a1c1c;font-size:.9rem;min-height:1.2em;margin:10px 0 0"></p>
+  </div>
+</div>
+
+<div id="presenter">
+  <div id="slide"></div>
+  <div id="pbar"><button id="pPrev">◀ Anterior</button><span id="pnote"></span><span><span id="pNum"></span> &nbsp;<button id="pNext">Próximo ▶</button> <button id="pClose">✕ Sair</button></span></div>
+</div>
+
+<script>
+(function(){
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const arr=a=>Array.isArray(a)?a:[];
+let pages=[];        // texto por página
+let pdfDoc=null;
+let lessons=[];      // {n, page}
+let lessonText="";let srcText=false;
+let data={A:null,B:null,C:null,D:null,N:{}};let currentAulaId=null,saveTimer=null;
+let sampleFn=null;
+let chatHist=[];
+
+function toast(t){const d=document.createElement("div");d.className="toast";d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),2600)}
+function setStep(n){for(let i=1;i<=4;i++){const s=$("#st"+i);s.className="step"+(i<n?" done":i===n?" on":"")}}
+
+// ---------- SERVIDOR / CONTA ----------
+let token="",me=null;
+try{token=localStorage.getItem("teacher_token")||""}catch(e){}
+async function api(acao,body){
+  let r;
+  try{r=await fetch("api.php?acao="+acao,{method:"POST",headers:{"Content-Type":"application/json","X-Token":token},body:JSON.stringify(body||{})})}
+  catch(e){throw {code:"network",message:"Sem conexão com o servidor. Verifique a internet."}}
+  let j={};try{j=await r.json()}catch(e){throw {code:"server",message:"O servidor demorou demais ou deu erro. Tente de novo."}}
+  if(r.status===401&&acao!=="entrar"){logoutLocal();showLogin(j.error||"Faça login para continuar.");throw {code:"auth",message:j.error||"Faça login."}}
+  if(r.status===429)throw {code:"rate_limited",message:j.error||"Limite de uso atingido. Tente mais tarde."};
+  if(!r.ok||j.error)throw {code:"server",message:j.error||"Erro no servidor."};
+  return j;
+}
+async function callAI(messages,maxTokens){
+  const j=await api("ia",{messages,max_tokens:maxTokens||8000});
+  if(j.stop==="max_tokens")throw {code:"long",message:"A resposta ficou grande demais e veio cortada. Clique em Tentar de novo."};
+  return j.text||"";
+}
+function logoutLocal(){token="";me=null;try{localStorage.removeItem("teacher_token")}catch(e){}$("#nav").classList.add("hidden")}
+function setSession(t,u){token=t;me=u;try{localStorage.setItem("teacher_token",t)}catch(e){}afterLogin()}
+function afterLogin(){
+  $("#login").style.display="none";$("#loginErr").textContent="";
+  $("#nav").classList.remove("hidden");
+  $("#whoName").textContent=me.nome+(me.admin?" (admin)":"");
+  $("#navAdmin").classList.toggle("hidden",!me.admin);
+}
+function showLogin(msg){$("#login").style.display="flex";$("#loginErr").textContent=msg||""}
+document.querySelectorAll(".authtabs button").forEach(b=>b.onclick=()=>{
+  document.querySelectorAll(".authtabs button").forEach(x=>x.classList.toggle("on",x===b));
+  $("#formEntrar").classList.toggle("hidden",b.dataset.a!=="entrar");
+  $("#formCad").classList.toggle("hidden",b.dataset.a!=="cadastrar");
+  $("#loginErr").textContent="";
+});
+$("#formEntrar").onsubmit=async e=>{
+  e.preventDefault();$("#loginErr").textContent="Entrando…";
+  try{const j=await api("entrar",{email:$("#lEmail").value,senha:$("#lSenha").value});setSession(j.token,j.usuario)}
+  catch(err){$("#loginErr").textContent=err.message}
+};
+$("#formCad").onsubmit=async e=>{
+  e.preventDefault();$("#loginErr").textContent="Criando conta…";
+  try{const j=await api("cadastrar",{nome:$("#cNome").value,igreja:$("#cIgreja").value,email:$("#cEmail").value,senha:$("#cSenha").value,convite:$("#cConvite").value});setSession(j.token,j.usuario);toast("Bem-vindo(a), "+j.usuario.nome+"!")}
+  catch(err){$("#loginErr").textContent=err.message}
+};
+$("#btnSair").onclick=async()=>{try{await api("sair")}catch(e){}logoutLocal();showLogin("")};
+$("#btnSenha").onclick=()=>{
+  const box=document.createElement("div");
+  box.style.cssText="position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:80;display:flex;align-items:center;justify-content:center;padding:20px";
+  box.innerHTML='<form class="card" style="max-width:360px;width:100%;margin:0"><h3>Trocar senha</h3><input type="password" id="sA" placeholder="Senha atual" style="margin-bottom:10px"><input type="password" id="sN" placeholder="Nova senha (mín. 6)" style="margin-bottom:10px"><p id="sE" style="color:#8a1c1c;font-size:.9rem;min-height:1.2em"></p><div class="row"><button class="btn" type="submit">Salvar</button><button class="btn sec" type="button" id="sC">Cancelar</button></div></form>';
+  document.body.appendChild(box);
+  box.querySelector("#sC").onclick=()=>box.remove();
+  box.querySelector("form").onsubmit=async e=>{e.preventDefault();try{await api("trocar_senha",{atual:box.querySelector("#sA").value,nova:box.querySelector("#sN").value});box.remove();toast("Senha alterada!")}catch(err){box.querySelector("#sE").textContent=err.message}};
+};
+(async()=>{
+  if(!token){showLogin("");return}
+  try{const j=await api("eu");me=j.usuario;afterLogin()}catch(e){if(e.code!=="auth")showLogin(e.message)}
+})();
+
+// ---------- NAVEGAÇÃO ----------
+function showView(v){
+  document.querySelectorAll("#nav button[data-v]").forEach(b=>b.classList.toggle("on",b.dataset.v===v));
+  $("#viewPreparar").classList.toggle("hidden",v!=="preparar");
+  $("#viewSala").classList.toggle("hidden",v!=="sala");
+  $("#viewAdmin").classList.toggle("hidden",v!=="admin");
+  $("#viewMinhas").classList.toggle("hidden",v!=="minhas");
+  if(v==="minhas")loadMinhas();
+  if(v==="sala")loadFeed(true);
+  if(v==="admin")loadAdmin();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+document.querySelectorAll("#nav button[data-v]").forEach(b=>b.onclick=()=>showView(b.dataset.v));
+
+// ---------- PDF ----------
+["#ano","#trimestre"].forEach(s=>$(s).addEventListener("change",()=>{if(pages.length>1)detectLessons()}));
+if(window.pdfjsLib){pdfjsLib.GlobalWorkerOptions.workerSrc="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";}
+const drop=$("#drop"),fileIn=$("#file");
+drop.onclick=()=>fileIn.click();
+drop.ondragover=e=>{e.preventDefault();drop.classList.add("hover")};
+drop.ondragleave=()=>drop.classList.remove("hover");
+drop.ondrop=e=>{e.preventDefault();drop.classList.remove("hover");if(e.dataTransfer.files[0])loadFile(e.dataTransfer.files[0])};
+fileIn.onchange=()=>{if(fileIn.files[0])loadFile(fileIn.files[0]);fileIn.value=""};
+
+function loadFile(f){
+  const n=f.name.toLowerCase();
+  if(n.endsWith(".pdf")||f.type==="application/pdf")return loadPdf(f);
+  if(n.endsWith(".txt")||f.type.startsWith("text/"))return loadTxt(f);
+  if(n.endsWith(".docx"))return loadDocx(f);
+  if(n.endsWith(".doc"))return $("#pdfStatus").innerHTML='<div class="err">Arquivo .doc antigo não é aceito. No Word, use “Salvar como” → .docx, ou copie e cole o texto.</div>';
+  $("#pdfStatus").innerHTML='<div class="err">Formato não aceito. Envie PDF, Word (.docx) ou .txt.</div>';
+}
+function useText(t,label){
+  pdfDoc=null;
+  t=String(t||"").replace(/\r/g,"").trim();
+  if(t.length<200){$("#pdfStatus").innerHTML='<div class="err">O texto está muito curto. Confira se é a lição completa.</div>';return}
+  // divide em "páginas" de ~3000 caracteres para permitir escolher a lição
+  pages=[];srcText=true;
+  const parts=t.split(/(?=\n\s*LI[ÇC][ÃA]O\s*(?:N[ºo°.]*\s*)?\d{1,2}\b)/i);
+  parts.forEach(p=>{for(let i=0;i<p.length;i+=3000)pages.push(p.slice(i,i+3000))});
+  $("#pdfStatus").innerHTML=`✅ <b>${esc(label)}</b> — ${t.length.toLocaleString("pt-BR")} caracteres lidos.`;
+  detectLessons();
+}
+async function loadTxt(f){
+  $("#pdfStatus").textContent="Lendo o arquivo…";
+  try{
+    const buf=await f.arrayBuffer();
+    let t=new TextDecoder("utf-8").decode(buf);
+    if(t.includes("\uFFFD"))t=new TextDecoder("windows-1252").decode(buf);
+    useText(t,f.name);
+  }catch(e){$("#pdfStatus").innerHTML='<div class="err">Não consegui ler este arquivo.</div>'}
+}
+async function loadDocx(f){
+  if(!window.mammoth){$("#pdfStatus").innerHTML='<div class="err">Leitor de Word indisponível. Copie e cole o texto na Opção B.</div>';return}
+  $("#pdfStatus").textContent="Lendo o Word…";
+  try{const r=await mammoth.extractRawText({arrayBuffer:await f.arrayBuffer()});useText(r.value,f.name)}
+  catch(e){$("#pdfStatus").innerHTML='<div class="err">Não consegui ler este Word. Copie e cole o texto na Opção B.</div>'}
+}
+
+async function loadPdf(f){
+  const st=$("#pdfStatus");
+  if(!window.pdfjsLib){st.innerHTML='<span class="err">Não foi possível carregar o leitor de PDF. Use a opção de colar o texto.</span>';return}
+  st.textContent="Lendo o PDF…";
+  try{
+    const buf=await f.arrayBuffer();
+    const pdf=await pdfjsLib.getDocument({data:buf}).promise;pdfDoc=pdf;
+    pages=[];srcText=false;
+    for(let i=1;i<=pdf.numPages;i++){
+      const p=await pdf.getPage(i);const tc=await p.getTextContent();
+      let out="",lastY=null;
+      for(const it of tc.items){const y=it.transform?it.transform[5]:null;if(lastY!==null&&y!==null&&Math.abs(y-lastY)>4)out+="\n";else if(out&&!out.endsWith(" "))out+=" ";out+=it.str;lastY=y}
+      pages.push(out.replace(/[ \t]+/g," ").trim());
+      if(i%10===0)st.textContent=`Lendo o PDF… página ${i} de ${pdf.numPages}`;
+    }
+    const total=pages.join("").length;
+    if(total<200){st.innerHTML='<div class="err">Este PDF parece ser escaneado (imagem), sem texto para ler. Cole o texto da lição na opção abaixo.</div>';return}
+    st.innerHTML=`✅ <b>${esc(f.name)}</b> — ${pdf.numPages} páginas lidas.`;
+    detectLessons();
+  }catch(e){console.error(e);st.innerHTML='<div class="err">Não consegui ler este PDF. Tente outro arquivo ou cole o texto da lição.</div>'}
+}
+$("#usePasted").onclick=()=>{
+  const t=$("#pasted").value.trim();
+  if(t.length<200){toast("Cole o texto completo da lição");return}
+  useText(t,"Texto colado");
+};
+
+const MESES=["janeiro","fevereiro","março","abril","maio","junho","julho","agosto","setembro","outubro","novembro","dezembro"];
+function findDate(t){
+  const m=t.match(/(\d{1,2})\s*(?:de\s+)?(janeiro|fevereiro|mar[çc]o|abril|maio|junho|julho|agosto|setembro|outubro|novembro|dezembro)(?:\s*(?:de\s+)?(\d{4}))?/i);
+  if(!m)return null;
+  const mes=MESES.findIndex(x=>x.normalize("NFD").replace(/\p{M}/gu,"")===m[2].toLowerCase().normalize("NFD").replace(/\p{M}/gu,""));
+  if(mes<0)return null;
+  const ano=m[3]?+m[3]:(+$("#ano").value||new Date().getFullYear());
+  const d=new Date(ano,mes,+m[1]);return isNaN(d)?null:d;
+}
+function sundaysOfQuarter(){
+  const q=Math.max(1,Math.min(4,parseInt($("#trimestre").value)||1));
+  const ano=+$("#ano").value||new Date().getFullYear();
+  const d=new Date(ano,(q-1)*3,1);while(d.getDay()!==0)d.setDate(d.getDate()+1);
+  const out=[];const fim=new Date(ano,q*3,1);
+  while(d<fim&&out.length<14){out.push(new Date(d));d.setDate(d.getDate()+7)}
+  return out;
+}
+const norm=s=>s.toLowerCase().normalize("NFD").replace(/\p{M}/gu,"").replace(/\s+/g," ");
+function datePatterns(d){
+  const dd=d.getDate(),mm=d.getMonth()+1,mes=norm(MESES[d.getMonth()]);
+  const p2=n=>String(n).padStart(2,"0");
+  return [new RegExp(`\\b0?${dd}\\s*(de\\s+)?${mes}\\b`),new RegExp(`\\b0?${dd}\\s*[/.\\-]\\s*${p2(mm)}\\b`),new RegExp(`\\b0?${dd}\\s*[/.\\-]\\s*${mm}\\s*[/.\\-]`)];
+}
+function detectLessons(){
+  lessons=[];
+  const P=pages.map(norm);
+  const lessonRe=n=>new RegExp(`licao\\s*(n[ºo°.]*\\s*)?0?${n}\\b|\\b0?${n}\\s*[ªa]?\\s*licao\\b`);
+  // páginas de sumário/índice: muitas lições ou muitas datas na mesma página
+  const isIndex=t=>{const ls=new Set([...t.matchAll(/licao\s*(?:n[ºo°.]*\s*)?(\d{1,2})\b/g)].map(m=>m[1]));
+    const ds=(t.match(/\b\d{1,2}\s*(?:de\s+)?(?:janeiro|fevereiro|marco|abril|maio|junho|julho|agosto|setembro|outubro|novembro|dezembro)\b/g)||[]).length;
+    return ls.size>=5||ds>=4};
+  const skip=P.map(t=>t.length<200||isIndex(t));
+  const datas=sundaysOfQuarter();
+  let from=0;
+  for(let n=1;n<=Math.max(13,datas.length);n++){
+    const dt=datas[n-1]||null;let found=-1,score=0;
+    for(let i=from;i<P.length;i++){
+      if(skip[i])continue;
+      const t=P[i],head=t.slice(0,1500);
+      const hasL=lessonRe(n).test(head),hasD=dt?datePatterns(dt).some(r=>r.test(head)):false;
+      const s=(hasL?1:0)+(hasD?2:0);
+      if(s>=2||(s===1&&found<0)){if(s>score){found=i;score=s}if(s>=2)break}
+    }
+    if(found>=0&&score>=1){lessons.push({n,page:found+1,date:dt,ok:true});from=found+1}
+    else lessons.push({n,page:0,date:dt,ok:false});
+  }
+  while(lessons.length&&!lessons[lessons.length-1].ok&&lessons.length>13)lessons.pop();
+  const hint=fillSelect(true);
+  $("#licao").onchange=applyLesson;
+  ["#pgIni","#pgFim"].forEach(s=>$(s).oninput=()=>{$("#licao").value="custom";buildText()});
+  $("#sec2").classList.remove("hidden");$("#sec3").classList.remove("hidden");setStep(2);
+  applyLesson();
+  if(hint)$("#licaoInfo").textContent=hint.trim()+" "+$("#licaoInfo").textContent;
+  $("#btnPaginas").classList.toggle("hidden",!pdfDoc);
+  $("#btnIAlicoes").classList.toggle("hidden",pages.length<2);
+  $("#sec2").scrollIntoView({behavior:"smooth"});
+}
+function fillSelect(pickNext){
+  const found=lessons.filter(l=>l.ok);
+  const fmt=d=>d?d.toLocaleDateString("pt-BR",{day:"2-digit",month:"long"}):"";
+  const sel=$("#licao");const prev=sel.value;sel.innerHTML="";
+  if(pages.length===1){sel.innerHTML='<option value="all">Texto inteiro</option>';return ""}
+  lessons.forEach((l,i)=>{if(l.ok){const nx=lessons.slice(i+1).find(x=>x.ok&&x.page>l.page);l.end=Math.min(nx?nx.page-1:pages.length,l.page+13,pages.length)}
+    sel.innerHTML+=`<option value="${i}">Lição ${l.n}${l.date?" — "+fmt(l.date):""}${l.ok?` — págs. ${l.page} a ${l.end}`:" — não achei (use os botões abaixo)"}</option>`});
+  sel.innerHTML+=`<option value="all">${srcText?"Texto inteiro":`Revista inteira — págs. 1 a ${pages.length} (muito grande: o app usa só o começo)`}</option>`;
+  sel.innerHTML+='<option value="custom">Escolher páginas manualmente</option>';
+  let hint="";
+  if(pickNext){
+    const hoje=new Date();hoje.setHours(0,0,0,0);
+    const prox=lessons.map((l,i)=>({l,i})).filter(x=>x.l.date&&x.l.date>=hoje).sort((a,b)=>a.l.date-b.l.date)[0];
+    if(prox){sel.value=String(prox.i);hint=`Selecionei a lição do próximo domingo: Lição ${prox.l.n} (${fmt(prox.l.date)}).`}
+    else if(found.length)sel.value=String(lessons.indexOf(found[0]));
+  }else if(prev)sel.value=prev;
+  hint+=` Encontrei ${found.length} de ${lessons.length} lições no arquivo.`;
+  if(found.length<lessons.length)hint+=" Para as que faltam, use “Ver as páginas” ou “Achar as lições com IA”.";
+  return hint;
+}
+function applyLesson(){
+  const v=$("#licao").value;
+  if(v==="all"){$("#pgIni").value=1;$("#pgFim").value=pages.length}
+  else if(v!=="custom"){
+    const i=+v,l=lessons[i];
+    if(!l||!l.ok){$("#licaoInfo").textContent="Não encontrei o começo desta lição. Clique em “Ver as páginas da revista” para escolher, ou em “Achar as lições com IA”.";return}
+    const nx=lessons.slice(i+1).find(x=>x.ok);
+    $("#pgIni").value=l.page;$("#pgFim").value=l.end||Math.min(nx?nx.page-1:pages.length,l.page+13,pages.length);
+  }
+  else if(!$("#pgIni").value){$("#pgIni").value=1;$("#pgFim").value=Math.min(pages.length,8)}
+  buildText();
+}
+function buildText(){
+  let a=Math.min(pages.length,Math.max(1,+$("#pgIni").value||1)),b=Math.min(pages.length,+$("#pgFim").value||a);
+  if(b<a)b=a;
+  const full=pages.slice(a-1,b).join("\n\n");lessonText=full.slice(0,45000);
+  $("#preview").textContent=lessonText;
+  $("#licaoInfo").textContent=pages.length>1?`Serão usadas as páginas ${a} a ${b}. Começa com: “${lessonText.replace(/\s+/g," ").slice(0,90)}…”${full.length>45000?" ⚠️ Texto grande demais: o app vai usar só o começo. Escolha menos páginas.":""}`:"";
+}
+
+// ---------- VER PÁGINAS / ACHAR COM IA ----------
+$("#btnPaginas").onclick=()=>{
+  if(!pdfDoc){toast("Disponível só para PDF");return}
+  const m=document.createElement("div");m.className="modal";
+  m.innerHTML=`<div class="card wide"><div class="row" style="justify-content:space-between"><h3 style="margin:0">Páginas da revista</h3><button class="btn sm" id="pgOk">Usar estas páginas</button></div>
+    <p class="muted">Ache a capa da lição e clique em <b>Começa aqui</b>. Depois, na última página dela, clique em <b>Termina aqui</b>. <span id="pgSel"></span></p>
+    <div class="row" style="margin-bottom:10px"><label style="margin:0">Ir para a página</label><input type="number" id="pgGo" min="1" max="${pages.length}" style="width:110px"></div>
+    <div class="pgrid" id="pgGrid"></div></div>`;
+  document.body.appendChild(m);
+  let ini=+$("#pgIni").value||1,fim=+$("#pgFim").value||ini;
+  const grid=m.querySelector("#pgGrid");
+  grid.innerHTML=pages.map((t,i)=>`<div class="pgc" id="pgc${i+1}" data-p="${i+1}"><canvas width="150" height="212"></canvas><b>Pág. ${i+1}</b><div class="pt">${esc(t.replace(/\s+/g," ").slice(0,90))}</div><button data-s="ini">Começa aqui</button><button data-s="fim">Termina aqui</button></div>`).join("");
+  const mark=()=>{grid.querySelectorAll(".pgc").forEach(c=>{const p=+c.dataset.p;c.classList.toggle("ini",p===ini);c.classList.toggle("fim",p===fim);c.classList.toggle("in",p>=ini&&p<=fim)});m.querySelector("#pgSel").textContent=`Selecionado: págs. ${ini} a ${fim}.`};
+  mark();
+  grid.onclick=e=>{const b=e.target.closest("button[data-s]");if(!b)return;const p=+b.closest(".pgc").dataset.p;if(b.dataset.s==="ini"){ini=p;if(fim<ini)fim=Math.min(pages.length,ini+6)}else{fim=p;if(fim<ini)ini=fim}mark()};
+  const io=new IntersectionObserver(async ents=>{for(const en of ents){if(!en.isIntersecting)continue;const c=en.target;io.unobserve(c);
+    try{const pg=await pdfDoc.getPage(+c.dataset.p);const vp0=pg.getViewport({scale:1});const vp=pg.getViewport({scale:300/vp0.width});const cv=c.querySelector("canvas");cv.width=vp.width;cv.height=vp.height;await pg.render({canvasContext:cv.getContext("2d"),viewport:vp}).promise}catch(_){}}},{root:m.querySelector(".card"),rootMargin:"400px"});
+  grid.querySelectorAll(".pgc").forEach(c=>io.observe(c));
+  m.querySelector("#pgGo").onchange=ev=>{const el=m.querySelector("#pgc"+ev.target.value);if(el)el.scrollIntoView({behavior:"smooth",block:"center"})};
+  setTimeout(()=>{const el=m.querySelector("#pgc"+ini);if(el)el.scrollIntoView({block:"center"})},100);
+  m.querySelector("#pgOk").onclick=()=>{$("#licao").value="custom";$("#pgIni").value=ini;$("#pgFim").value=fim;io.disconnect();m.remove();buildText()};
+  m.addEventListener("click",e=>{if(e.target===m){io.disconnect();m.remove()}});
+};
+$("#btnIAlicoes").onclick=async()=>{
+  const b=$("#btnIAlicoes");b.disabled=true;b.textContent="🔎 Procurando… (até 1 minuto)";
+  try{
+    const resumo=pages.map((t,i)=>`[p${i+1}] `+t.replace(/\s+/g," ").slice(0,220)).join("\n");
+    const prompt=`Abaixo está o começo de cada página de uma revista de Escola Bíblica Dominical (${$("#editora").value||""} ${$("#trimestre").value} ${$("#ano").value||""}). Identifique em qual página COMEÇA cada lição (a página de abertura da lição, não o sumário/índice nem menções a outras lições). Responda SOMENTE com JSON: {"licoes":[{"n":1,"pagina":0}]} — só as lições que você conseguir identificar.\n\n${resumo}`.slice(0,110000);
+    const r=parseJSON(await callAI([{role:"user",content:prompt}],2000));
+    let n=0;arr(r.licoes).forEach(x=>{const l=lessons.find(y=>y.n===+x.n);const pg=+x.pagina;if(l&&pg>=1&&pg<=pages.length){l.page=pg;l.ok=true;n++}});
+    lessons.sort((a,b)=>a.n-b.n);
+    const hint=fillSelect(false);applyLesson();
+    $("#licaoInfo").textContent=`A IA localizou ${n} lições.`+hint+" "+$("#licaoInfo").textContent;
+  }catch(e){toast(e.message||"Não consegui achar as lições")}
+  b.disabled=false;b.textContent="🔎 Achar as lições com IA";
+};
+
+// ---------- IA ----------
+function ctx(){
+  return `CONTEXTO DA AULA
+Revista: ${$("#editora").value||"não informada"} — ${$("#trimestre").value} de ${$("#ano").value||"ano não informado"}
+Classe: ${$("#classe").value}
+Duração da aula: ${$("#duracao").value} minutos
+Profundidade: ${$("#nivel").value}
+Linha teológica do professor: ${$("#linha").value}
+Perfil da turma: ${$("#perfil").value||"não informado"}
+
+REGRAS
+- Você é um assistente de preparação de aulas para professores da Escola Bíblica Dominical (EBD).
+- A revista é a fonte principal: respeite o tema, os tópicos e o ensino dela. Complemente, não contradiga.
+- Distinga com clareza o que é texto bíblico, contexto histórico e interpretação teológica. Quando houver mais de uma posição séria, apresente com respeito e transparência.
+- Não invente fatos, datas, descobertas ou citações. Se algo for incerto ou debatido, diga "(data aproximada)" ou "(debatido)".
+- Não transcreva longos trechos da Bíblia: cite a referência e, no máximo, um versículo curto.
+- Aplicações devem respeitar o sentido original do texto, sem interpretações forçadas.
+- Linguagem: português do Brasil, adequada à classe e à profundidade escolhidas.
+- Responda SOMENTE com JSON válido, sem texto antes ou depois, sem blocos de código.
+
+TEXTO DA LIÇÃO (extraído da revista):
+"""
+${lessonText}
+"""`;
+}
+
+const PROMPTS={
+A:`Analise a lição e monte a estrutura da aula. Retorne este JSON:
+{"titulo":"título da lição","texto_aureo":{"ref":"","texto":""},"verdade_pratica":"","leitura_biblica":"referência da leitura bíblica em classe",
+"objetivos":["..."],
+"topicos":[{"titulo":"","resumo":"2-4 frases","subtopicos":["..."]}],
+"conceitos_dificeis":[{"termo":"","explicacao":""}],
+"contexto":{"autor":"","destinatarios":"","periodo":"","situacao_politica":"","costumes":"","motivo":"qual problema ou situação motivou o texto"},
+"introducao_impactante":"uma introdução de 1 minuto para abrir a aula",
+"plano_aula":[{"etapa":"Introdução|Leitura bíblica|Tópico 1...|Explicação complementar|Participação dos alunos|Aplicação|Conclusão","minutos":0,"o_que_fazer":"","dica":""}],
+"explicar_simples":[{"assunto":"","como_explicar":"comparação ou exemplo simples"}]}
+A soma dos minutos do plano_aula deve ser exatamente a duração da aula.`,
+B:`Aprofunde as passagens bíblicas da lição. Retorne este JSON:
+{"passagens":[{"ref":"","resumo":"","versiculos":[{"v":"número ou intervalo","explicacao":"1-2 frases"}],
+"palavras_originais":[{"palavra":"palavra em português","lingua":"hebraico ou grego","original":"termo transliterado","significado":""}],
+"referencias_cruzadas":["ref — por que se relaciona"],"interpretacoes":[{"visao":"","explicacao":""}]}]}
+Aprofunde as 2 ou 3 passagens principais. Seja objetivo: no máximo 8 versículos comentados por passagem, 3 palavras no original, 4 referências cruzadas e 2 interpretações.`,
+D:`Descreva o mundo bíblico da lição: lugares, tempo e cultura. Retorne este JSON:
+{"locais":[{"nome":"","tipo":"cidade|região|rio|monte|país","lat":0.0,"lon":0.0,"relevancia":""}],
+"rotas":[{"nome":"","pontos":["nomes exatamente como em locais, na ordem"]}],
+"distancias":[{"de":"","ate":"","km":"aprox."}],
+"linha_do_tempo":[{"data":"","evento":"","momento":"antes|durante|depois"}],
+"contemporaneos":["personagem ou povo da mesma época — breve nota"],
+"cultura":[{"tema":"Vestimentas|Alimentação|Moradia|Família|Religião|Comércio|...","explicacao":""}],
+"arqueologia":[{"descoberta":"","relacao":"como ilumina o texto"}]}
+Use coordenadas reais aproximadas (graus decimais). Se a lição não citar lugares, use os lugares ligados às passagens. No máximo 10 locais, 10 eventos na linha do tempo, 5 temas de cultura e 4 descobertas.`,
+C:`Prepare os recursos de ensino para a aula. Retorne este JSON:
+{"aplicacoes":[{"tema":"Família|Trabalho|Ansiedade|Redes sociais|...","aplicacao":"","cuidado":"limite para não forçar o texto"}],
+"perguntas":{"compreensao":[{"p":"","r":"resposta comentada"}],"reflexao":[{"p":"","r":""}],"debate":[{"p":"","r":""}]},
+"estudo_de_caso":{"titulo":"","situacao":"","perguntas":["..."]},
+"dinamica":{"nome":"","material":"","como_fazer":"","objetivo":"","tempo":""},
+"revisao":[{"p":"","opcoes":["a","b","c","d"],"correta":0}],
+"slides":[{"titulo":"","pontos":["frases curtas, até 5"],"ref":"referência bíblica se houver","nota":"o que o professor fala neste slide"}],
+"conclusao":"","desafio":"desafio espiritual da semana"}
+Faça de 10 a 14 slides: capa com tema, texto-chave, objetivos, contexto, um ou mais por tópico, aplicação, perguntas, conclusão e desafio. 3 perguntas de cada tipo e 5 de revisão.`
+};
+
+function parseJSON(t){
+  t=String(t||"").replace(/```json|```/g,"").trim();
+  const a=t.indexOf("{"),b=t.lastIndexOf("}");
+  if(a<0||b<0)throw new Error("sem JSON");
+  return JSON.parse(t.slice(a,b+1));
+}
+async function ask(key){
+  const t=await callAI([{role:"user",content:ctx()+"\n\nTAREFA\n"+PROMPTS[key]}],10000);
+  return parseJSON(t);
+}
+
+const TABS=[
+ ["roteiro","📋 Roteiro","A"],["contexto","🏛️ Contexto","A"],["escrituras","📖 Escrituras","B"],["atlas","🗺️ Atlas","D"],
+ ["tempo","⏳ Linha do tempo","D"],["cultura","🏺 Cultura","D"],["aplicacao","💡 Aplicação","C"],["perguntas","❓ Perguntas","C"],
+ ["slides","🖥️ Slides","C"],["chat","💬 Assistente",null]
+];
+function buildTabs(){
+  $("#tabs").innerHTML=TABS.map(([id,l,k],i)=>`<button class="tab${i===0?" on":""}" data-t="${id}">${l}${k?`<span class="dot load" data-k="${k}"></span>`:""}</button>`).join("");
+  $("#panels").innerHTML=TABS.map(([id],i)=>`<div class="card panel${i===0?" on":""}" id="p-${id}"><div class="loading"><div class="spinner"></div>Preparando…</div></div>`).join("");
+  $("#tabs").onclick=e=>{const b=e.target.closest(".tab");if(!b)return;document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("on",x===b));document.querySelectorAll(".panel").forEach(p=>p.classList.toggle("on",p.id==="p-"+b.dataset.t))};
+  renderChat();
+}
+function setDot(k,state){document.querySelectorAll(`.dot[data-k="${k}"]`).forEach(d=>d.className="dot "+state)}
+
+async function runPart(k){
+  setDot(k,"load");
+  TABS.filter(t=>t[2]===k).forEach(([id])=>$("#p-"+id).innerHTML='<div class="loading"><div class="spinner"></div>Preparando… isso pode levar até 1 minuto.</div>');
+  try{
+    data[k]=await ask(k);
+    setDot(k,"ok");render(k);
+  }catch(e){
+    console.error(e);setDot(k,"");
+    const msg=(e&&e.code&&e.message)?e.message:"Não consegui gerar esta parte (a resposta veio incompleta). Tente de novo.";
+    TABS.filter(t=>t[2]===k).forEach(([id])=>$("#p-"+id).innerHTML=`<div class="err">${esc(msg)}</div><button class="btn sm" onclick="window.__retry('${k}')">Tentar de novo</button>`);
+  }
+}
+window.__retry=k=>runPart(k);
+
+$("#gerar").onclick=async()=>{
+  if(!lessonText||lessonText.length<200){toast("Envie a revista e escolha a lição primeiro");return}
+  $("#gerar").disabled=true;$("#gerarMsg").textContent="Gerando os materiais…";
+  data={A:null,B:null,C:null,D:null,N:{}};chatHist=[];currentAulaId=null;$("#saveState").textContent="";
+  $("#sec4").classList.remove("hidden");setStep(4);buildTabs();
+  $("#lessonTitle").textContent="Sua aula";
+  $("#sec4").scrollIntoView({behavior:"smooth"});
+  // A primeiro (pede permissão uma vez), depois B e C juntos
+  await runPart("A");
+  await Promise.all([runPart("B"),runPart("C"),runPart("D")]);
+  $("#gerar").disabled=false;$("#gerarMsg").textContent="Pronto! Você pode mudar as opções e gerar de novo.";
+  if(data.A||data.C)saveAula();
+};
+
+// ---------- RENDER ----------
+function list(a){a=arr(a);return a.length?`<ul class="clean">${a.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>`:""}
+function render(k){
+  renderCore(k);
+  TABS.filter(t=>t[2]===k).forEach(([id])=>decorate(id,k));
+}
+function renderCore(k){
+  if(k==="A"){
+    const d=data.A;$("#lessonTitle").textContent=d.titulo||"Sua aula";
+    const tot=arr(d.plano_aula).reduce((s,x)=>s+(+x.minutos||0),0);
+    $("#p-roteiro").innerHTML=`
+      <h2>${esc(d.titulo)}</h2>
+      ${d.texto_aureo&&d.texto_aureo.texto?`<div class="box"><b>Texto áureo — ${esc(d.texto_aureo.ref)}</b><br>${esc(d.texto_aureo.texto)}</div>`:""}
+      ${d.verdade_pratica?`<p><b>Verdade prática:</b> ${esc(d.verdade_pratica)}</p>`:""}
+      ${d.leitura_biblica?`<p><b>Leitura bíblica em classe:</b> ${esc(d.leitura_biblica)}</p>`:""}
+      <h3 class="sec-title">Objetivos</h3>${list(d.objetivos)}
+      <h3 class="sec-title">Introdução impactante</h3><div class="box">${esc(d.introducao_impactante)}</div>
+      <h3 class="sec-title">Plano da aula (${tot} min)</h3>
+      <table class="plan"><tr><th>Tempo</th><th>Etapa</th><th>O que fazer</th></tr>
+      ${arr(d.plano_aula).map(p=>`<tr><td class="mins">${esc(p.minutos)} min</td><td><b>${esc(p.etapa)}</b></td><td>${esc(p.o_que_fazer)}${p.dica?`<div class="muted">💡 ${esc(p.dica)}</div>`:""}</td></tr>`).join("")}</table>
+      <h3 class="sec-title">Tópicos da lição</h3>
+      ${arr(d.topicos).map((t,i)=>`<div class="qa"><b>${i+1}. ${esc(t.titulo)}</b><p style="margin:6px 0">${esc(t.resumo)}</p>${list(t.subtopicos)}</div>`).join("")}
+      <h3 class="sec-title">Como explicar de forma simples</h3>
+      ${arr(d.explicar_simples).map(x=>`<div class="qa"><b>${esc(x.assunto)}</b><div>${esc(x.como_explicar)}</div></div>`).join("")}`;
+    const c=d.contexto||{};
+    $("#p-contexto").innerHTML=`<h2>Contexto histórico</h2>
+      ${[["Quem escreveu?","autor"],["Para quem escreveu?","destinatarios"],["Em qual período?","periodo"],["Situação política","situacao_politica"],["Costumes da época","costumes"],["O que motivou a mensagem?","motivo"]].map(([l,f])=>c[f]?`<div class="qa"><b>${l}</b><div>${esc(c[f])}</div></div>`:"").join("")}
+      <h3 class="sec-title">Conceitos que precisam de explicação</h3>
+      ${arr(d.conceitos_dificeis).map(x=>`<div class="qa"><b>${esc(x.termo)}</b><div>${esc(x.explicacao)}</div></div>`).join("")}`;
+  }
+  if(k==="B"){
+    const d=data.B;
+    $("#p-escrituras").innerHTML=`<h2>Explorador das Escrituras</h2><p class="muted">Leia o texto completo na sua Bíblia. Aqui estão a explicação, as palavras no original e as ligações com outras passagens.</p>
+      ${arr(d.passagens).map(p=>`<div class="qa" style="padding:16px">
+        <h3 style="color:var(--brand)">${esc(p.ref)}</h3><p>${esc(p.resumo)}</p>
+        ${arr(p.versiculos).length?`<b>Versículo por versículo</b>${arr(p.versiculos).map(v=>`<p style="margin:6px 0"><span class="pill">v. ${esc(v.v)}</span> ${esc(v.explicacao)}</p>`).join("")}`:""}
+        ${arr(p.palavras_originais).length?`<div style="margin-top:10px"><b>Palavras no original</b><br>${arr(p.palavras_originais).map(w=>`<span class="word"><b>${esc(w.palavra)}</b> — <i>${esc(w.original)}</i> (${esc(w.lingua)})<br><span class="muted">${esc(w.significado)}</span></span>`).join("")}</div>`:""}
+        ${arr(p.referencias_cruzadas).length?`<div style="margin-top:10px"><b>Referências cruzadas</b>${list(p.referencias_cruzadas)}</div>`:""}
+        ${arr(p.interpretacoes).length?`<div style="margin-top:10px"><b>Interpretações teológicas</b>${arr(p.interpretacoes).map(x=>`<div class="box"><b>${esc(x.visao)}</b><br>${esc(x.explicacao)}</div>`).join("")}</div>`:""}
+      </div>`).join("")}`;
+  }
+  if(k==="D"){
+    const d=data.D;
+    renderAtlas(d);
+    $("#p-tempo").innerHTML=`<h2>Linha do tempo</h2>
+      <p class="muted"><span class="pill" style="background:#e5e7eb;color:#374151">antes</span><span class="pill">durante</span><span class="pill" style="background:#f6ead0;color:#8a6516">depois</span></p>
+      <div class="timeline">${arr(d.linha_do_tempo).map(t=>`<div class="tl ${esc(t.momento)}"><b>${esc(t.data)}</b> — ${esc(t.evento)}</div>`).join("")}</div>
+      ${arr(d.contemporaneos).length?`<h3 class="sec-title">Quem viveu na mesma época</h3>${list(d.contemporaneos)}`:""}`;
+    $("#p-cultura").innerHTML=`<h2>Arqueologia e cultura bíblica</h2>
+      ${arr(d.cultura).map(x=>`<div class="qa"><span class="pill">${esc(x.tema)}</span><div>${esc(x.explicacao)}</div></div>`).join("")}
+      <h3 class="sec-title">Descobertas arqueológicas</h3>
+      ${arr(d.arqueologia).map(x=>`<div class="box"><b>${esc(x.descoberta)}</b><br>${esc(x.relacao)}</div>`).join("")||'<p class="muted">Nenhuma descoberta diretamente ligada a esta lição.</p>'}`;
+  }
+  if(k==="C"){
+    const d=data.C;
+    $("#p-aplicacao").innerHTML=`<h2>Aplicação aos dias atuais</h2>
+      ${arr(d.aplicacoes).map(a=>`<div class="qa"><span class="pill">${esc(a.tema)}</span><div>${esc(a.aplicacao)}</div>${a.cuidado?`<div class="muted" style="margin-top:4px">⚠️ ${esc(a.cuidado)}</div>`:""}</div>`).join("")}
+      <h3 class="sec-title">Conclusão</h3><div class="box">${esc(d.conclusao)}</div>
+      <h3 class="sec-title">Desafio da semana</h3><div class="box">${esc(d.desafio)}</div>`;
+    const q=d.perguntas||{};
+    const qs=(t,a)=>arr(a).length?`<h3 class="sec-title">${t}</h3>${arr(a).map(x=>`<div class="qa">${esc(x.p)}<details><summary>Ver resposta comentada</summary><div style="margin-top:6px">${esc(x.r)}</div></details></div>`).join("")}`:"";
+    const cs=d.estudo_de_caso||{},dn=d.dinamica||{};
+    $("#p-perguntas").innerHTML=`<h2>Perguntas e dinâmicas</h2>
+      ${qs("Compreensão",q.compreensao)}${qs("Reflexão",q.reflexao)}${qs("Debate",q.debate)}
+      ${cs.titulo?`<h3 class="sec-title">Estudo de caso: ${esc(cs.titulo)}</h3><div class="box">${esc(cs.situacao)}</div>${list(cs.perguntas)}`:""}
+      ${dn.nome?`<h3 class="sec-title">Dinâmica: ${esc(dn.nome)}</h3><div class="qa"><p><b>Objetivo:</b> ${esc(dn.objetivo)}</p><p><b>Material:</b> ${esc(dn.material)}</p><p><b>Tempo:</b> ${esc(dn.tempo)}</p><p><b>Como fazer:</b> ${esc(dn.como_fazer)}</p></div>`:""}
+      <h3 class="sec-title">Questionário de revisão</h3>
+      ${arr(d.revisao).map((x,i)=>`<div class="qa"><b>${i+1}. ${esc(x.p)}</b>${arr(x.opcoes).map((o,j)=>`<div>${"abcd"[j]}) ${esc(o)}</div>`).join("")}<details><summary>Ver resposta</summary>Letra ${"abcd"[+x.correta]||"?"}</details></div>`).join("")}`;
+    $("#p-slides").innerHTML=`<div class="row" style="justify-content:space-between"><h2>Slides (${arr(d.slides).length})</h2><div class="row"><button class="btn sm sec" onclick="window.__slideEdit(-1)">➕ Novo slide</button><button class="btn sm" onclick="window.__present(0)">▶ Apresentar em tela cheia</button></div></div>
+      <p class="muted">Clique num slide para apresentar a partir dele. Use ✏️ para editar, ⬆️⬇️ para mudar a ordem e 🗑️ para apagar.</p>
+      <div class="slides-grid">${arr(d.slides).map((s,i)=>`<div class="sl"><div class="thumb" onclick="window.__present(${i})"><h4>${esc(s.titulo)}</h4>${arr(s.pontos).slice(0,4).map(p=>`<div>• ${esc(p)}</div>`).join("")}<span class="n">${i+1}</span></div>
+        <div class="ctr"><button title="Editar" onclick="window.__slideEdit(${i})">✏️</button><button title="Subir" onclick="window.__slideMove(${i},-1)">⬆️</button><button title="Descer" onclick="window.__slideMove(${i},1)">⬇️</button><button title="Novo depois deste" onclick="window.__slideEdit(-1,${i})">➕</button><button title="Apagar" onclick="window.__slideDel(${i},this)">🗑️</button></div></div>`).join("")}</div>`;
+  }
+}
+
+function renderAtlas(d){
+  const L=arr(d.locais).filter(l=>isFinite(+l.lat)&&isFinite(+l.lon)&&(+l.lat||+l.lon));
+  let svg="";
+  if(L.length){
+    let la=L.map(l=>+l.lat),lo=L.map(l=>+l.lon);
+    let minLa=Math.min(...la),maxLa=Math.max(...la),minLo=Math.min(...lo),maxLo=Math.max(...lo);
+    const padLa=Math.max(.6,(maxLa-minLa)*.2),padLo=Math.max(.8,(maxLo-minLo)*.2);
+    minLa-=padLa;maxLa+=padLa;minLo-=padLo;maxLo+=padLo;
+    const W=900,H=Math.max(380,Math.min(620,W*(maxLa-minLa)/(maxLo-minLo)*1.15));
+    const X=v=>(v-minLo)/(maxLo-minLo)*W,Y=v=>H-(v-minLa)/(maxLa-minLa)*H;
+    const byName={};L.forEach(l=>byName[String(l.nome).toLowerCase()]=l);
+    let grid="";const step=(maxLo-minLo)>10?5:(maxLo-minLo)>4?2:1;
+    for(let g=Math.ceil(minLo/step)*step;g<maxLo;g+=step)grid+=`<line x1="${X(g)}" y1="0" x2="${X(g)}" y2="${H}" stroke="#d3e0e6"/><text x="${X(g)+3}" y="${H-6}" font-size="11" fill="#8aa">${g}°L</text>`;
+    for(let g=Math.ceil(minLa/step)*step;g<maxLa;g+=step)grid+=`<line x1="0" y1="${Y(g)}" x2="${W}" y2="${Y(g)}" stroke="#d3e0e6"/><text x="4" y="${Y(g)-3}" font-size="11" fill="#8aa">${g}°N</text>`;
+    const colors=["#7a1f2b","#b8892d","#2f6f8a","#2f7a4f"];
+    const routes=arr(d.rotas).map((r,i)=>{const pts=arr(r.pontos).map(n=>byName[String(n).toLowerCase()]).filter(Boolean);if(pts.length<2)return"";return `<polyline points="${pts.map(p=>X(+p.lon)+","+Y(+p.lat)).join(" ")}" fill="none" stroke="${colors[i%4]}" stroke-width="3" stroke-dasharray="8 5" opacity=".8"/>`}).join("");
+    const marks=L.map(l=>`<g><circle cx="${X(+l.lon)}" cy="${Y(+l.lat)}" r="7" fill="#7a1f2b" stroke="#fff" stroke-width="2"/><text x="${X(+l.lon)+10}" y="${Y(+l.lat)+4}" font-size="14" font-family="Inter" font-weight="600" fill="#1f2a37" paint-order="stroke" stroke="#eaf1f4" stroke-width="4">${esc(l.nome)}</text></g>`).join("");
+    svg=`<svg class="map" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">${grid}${routes}${marks}</svg>
+      ${arr(d.rotas).length?`<div style="margin-top:8px">${arr(d.rotas).map((r,i)=>`<span class="pill" style="background:#fff;border:2px dashed ${colors[i%4]};color:${colors[i%4]}">${esc(r.nome)}</span>`).join("")}</div>`:""}`;
+  }
+  $("#p-atlas").innerHTML=`<h2>Atlas bíblico</h2><p class="muted">Mapa esquemático com a posição real aproximada dos lugares. Toque em “ver no mapa” para abrir o local no Google Maps.</p>
+    ${svg||'<p class="muted">A lição não cita lugares específicos.</p>'}
+    <h3 class="sec-title">Lugares da lição</h3>
+    ${L.map(l=>`<div class="qa"><b>${esc(l.nome)}</b> <span class="pill">${esc(l.tipo)}</span> <a href="https://www.google.com/maps/search/?api=1&query=${+l.lat},${+l.lon}" target="_blank" rel="noopener">ver no mapa ↗</a><div>${esc(l.relevancia)}</div></div>`).join("")}
+    ${arr(d.distancias).length?`<h3 class="sec-title">Distâncias aproximadas</h3><ul class="clean">${arr(d.distancias).map(x=>`<li>${esc(x.de)} → ${esc(x.ate)}: <b>${esc(x.km)} km</b></li>`).join("")}</ul>`:""}`;
+}
+
+// ---------- SLIDES ----------
+let cur=0;
+function showSlide(){
+  const S=arr(data.C&&data.C.slides);if(!S.length)return;
+  cur=Math.max(0,Math.min(S.length-1,cur));const s=S[cur];
+  $("#slide").innerHTML=`<h2>${esc(s.titulo)}</h2><ul>${arr(s.pontos).map(p=>`<li>${esc(p)}</li>`).join("")}</ul>${s.ref?`<div class="ref">${esc(s.ref)}</div>`:""}`;
+  $("#pnote").textContent=s.nota?"Nota: "+s.nota:"";$("#pNum").textContent=`${cur+1} / ${S.length}`;
+}
+window.__present=i=>{if(!data.C){toast("Os slides ainda estão sendo gerados");return}cur=i||0;$("#presenter").classList.add("on");showSlide();try{document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen().catch(()=>{})}catch(e){}};
+$("#present").onclick=()=>window.__present(0);
+$("#pNext").onclick=()=>{cur++;showSlide()};$("#pPrev").onclick=()=>{cur--;showSlide()};
+$("#pClose").onclick=closeP;$("#slide").onclick=()=>{cur++;showSlide()};
+function closeP(){$("#presenter").classList.remove("on");try{document.fullscreenElement&&document.exitFullscreen()}catch(e){}}
+document.addEventListener("keydown",e=>{if(!$("#presenter").classList.contains("on"))return;if(["ArrowRight","PageDown"," "].includes(e.key)){cur++;showSlide();e.preventDefault()}if(["ArrowLeft","PageUp"].includes(e.key)){cur--;showSlide()}if(e.key==="Escape")closeP()});
+
+// ---------- CHAT ----------
+const CHIPS=["Explique melhor o segundo tópico","Qual a relação desta lição com o Antigo Testamento?","Como explicar este assunto para adolescentes?","Que exemplo atual posso usar?","Resuma a lição em 10 minutos","Prepare uma oração final"];
+function renderChat(){
+  $("#p-chat").innerHTML=`<h2>Assistente de ensino</h2><p class="muted">Pergunte qualquer coisa sobre esta lição. As respostas priorizam a revista.</p>
+    <div class="chips">${CHIPS.map(c=>`<button class="chip">${esc(c)}</button>`).join("")}</div>
+    <div class="chat" id="chatBox"></div>
+    <div class="row" style="margin-top:10px;flex-wrap:nowrap"><input type="text" id="chatIn" placeholder="Digite sua pergunta…"><button class="btn" id="chatSend">Enviar</button></div>`;
+  $("#p-chat").querySelectorAll(".chip").forEach(c=>c.onclick=()=>sendChat(c.textContent));
+  $("#chatSend").onclick=()=>sendChat($("#chatIn").value);
+  $("#chatIn").onkeydown=e=>{if(e.key==="Enter")sendChat($("#chatIn").value)};
+}
+function addMsg(r,t){const d=document.createElement("div");d.className="msg "+r;d.textContent=t;$("#chatBox").appendChild(d);$("#chatBox").scrollTop=1e9;return d}
+async function sendChat(q){
+  q=(q||"").trim();if(!q)return;$("#chatIn").value="";
+  addMsg("u",q);const out=addMsg("a","Pensando…");
+  const resumo=data.A?`\nRESUMO JÁ PREPARADO: título "${data.A.titulo}"; tópicos: ${arr(data.A.topicos).map(t=>t.titulo).join("; ")}`:"";
+  const sys=ctx().replace("- Responda SOMENTE com JSON válido, sem texto antes ou depois, sem blocos de código.","- Responda em texto simples, direto e organizado, sem markdown pesado.")+resumo+"\n\nVocê agora conversa com o professor. Responda à pergunta dele.";
+  const msgs=[];
+  const hist=chatHist.slice(-8);
+  if(!hist.length)msgs.push({role:"user",content:sys+"\n\nPERGUNTA: "+q});
+  else{msgs.push({role:"user",content:sys+"\n\nPERGUNTA: "+hist[0].q},{role:"assistant",content:hist[0].a});hist.slice(1).forEach(h=>{msgs.push({role:"user",content:h.q},{role:"assistant",content:h.a})});msgs.push({role:"user",content:q})}
+  try{
+    const t=await callAI(msgs,2500);
+    out.textContent=t;chatHist.push({q,a:t});
+  }catch(e){out.textContent=(e&&e.message)||"Não consegui responder agora. Tente de novo."}
+}
+
+// ---------- SALA DOS PROFESSORES ----------
+const TIPOS={ideia:"💡 Ideia",duvida:"❓ Dúvida",experiencia:"🙌 Experiência",aula:"📖 Aula preparada"};
+let feedLast=0,pendingAula=null,buscaTimer=null;
+function quando(s){try{return new Date(s).toLocaleString("pt-BR",{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"})}catch(e){return s}}
+function postHTML(p){
+  return `<div class="post" data-id="${p.id}">
+    <span class="pill t-${esc(p.tipo)}">${esc(TIPOS[p.tipo]||p.tipo)}</span>${p.licao?`<span class="pill" style="background:#f1ede4;color:#555">${esc(p.licao)}</span>`:""}
+    <h3>${esc(p.titulo||"")}</h3>
+    <div class="meta">${esc(p.autor)}${p.igreja?" · "+esc(p.igreja):""} · ${esc(quando(p.criado))}</div>
+    ${p.texto?`<div class="body">${esc(p.texto)}</div>`:""}
+    <div class="acts">
+      <button data-act="like" class="${p.eu_curti?"liked":""}">❤️ <span>${p.curtidas}</span></button>
+      <button data-act="com">💬 ${p.comentarios} comentário${p.comentarios===1?"":"s"}</button>
+      ${p.tem_aula?`<button data-act="abrir">📖 Abrir esta aula</button>`:""}
+      ${p.pode_apagar?`<button data-act="del">🗑️ Apagar</button>`:""}
+    </div>
+    <div class="coms hidden"></div>
+  </div>`;
+}
+async function loadFeed(reset){
+  if(reset){feedLast=0;$("#feed").innerHTML='<div class="loading"><div class="spinner"></div>Carregando…</div>'}
+  try{
+    const j=await api("posts",{busca:$("#fBusca").value,tipo:$("#fTipo").value,antes:feedLast});
+    if(reset)$("#feed").innerHTML="";
+    if(reset&&!j.posts.length)$("#feed").innerHTML='<div class="card" style="text-align:center"><p class="muted">Nenhuma publicação ainda. Seja o primeiro a compartilhar uma ideia! 🙌</p></div>';
+    $("#feed").insertAdjacentHTML("beforeend",j.posts.map(postHTML).join(""));
+    if(j.posts.length)feedLast=j.posts[j.posts.length-1].id;
+    $("#btnMais").classList.toggle("hidden",j.posts.length<20);
+  }catch(e){if(reset)$("#feed").innerHTML=`<div class="err">${esc(e.message)}</div>`}
+}
+$("#btnMais").onclick=()=>loadFeed(false);
+$("#fTipo").onchange=()=>loadFeed(true);
+$("#fBusca").oninput=()=>{clearTimeout(buscaTimer);buscaTimer=setTimeout(()=>loadFeed(true),400)};
+function openPostForm(prefill){
+  $("#formPost").classList.remove("hidden");
+  $("#pTipo").value=(prefill&&prefill.tipo)||"ideia";
+  $("#pLicao").value=(prefill&&prefill.licao)||"";
+  $("#pTitulo").value=(prefill&&prefill.titulo)||"";
+  $("#pTexto").value=(prefill&&prefill.texto)||"";
+  $("#pAulaInfo").style.display=pendingAula?"block":"none";
+  $("#pTitulo").focus();
+}
+$("#btnNovoPost").onclick=()=>{pendingAula=null;openPostForm()};
+$("#btnCancelPost").onclick=()=>{pendingAula=null;$("#formPost").classList.add("hidden")};
+$("#formPost").onsubmit=async e=>{
+  e.preventDefault();
+  const body={tipo:$("#pTipo").value,licao:$("#pLicao").value,titulo:$("#pTitulo").value,texto:$("#pTexto").value};
+  if(pendingAula)body.aula=pendingAula;
+  try{await api("post_criar",body);pendingAula=null;$("#formPost").classList.add("hidden");toast("Publicado!");loadFeed(true)}
+  catch(err){toast(err.message)}
+};
+$("#feed").onclick=async e=>{
+  const b=e.target.closest("button[data-act]");if(!b)return;
+  const card=b.closest(".post"),id=+card.dataset.id,act=b.dataset.act;
+  if(act==="like"){try{const j=await api("curtir",{id});b.querySelector("span").textContent=j.curtidas;b.classList.toggle("liked")}catch(err){toast(err.message)}}
+  if(act==="del"){
+    if(b.dataset.sure!=="1"){b.dataset.sure="1";b.textContent="Clique de novo para apagar";return}
+    try{await api("post_apagar",{id});card.remove();toast("Publicação apagada")}catch(err){toast(err.message)}
+  }
+  if(act==="com"){const c=card.querySelector(".coms");c.classList.toggle("hidden");if(!c.classList.contains("hidden"))loadComs(id,c)}
+  if(act==="abrir"){
+    b.textContent="Abrindo…";
+    try{
+      const j=await api("post_aula",{id});const a=j.aula||{};
+      data={A:a.A||null,B:a.B||null,C:a.C||null,D:a.D||null,N:a.N||{}};chatHist=[];lessonText="";currentAulaId=null;$("#saveState").textContent="Aula de outro professor — ao editar, uma cópia é salva em Minhas aulas.";
+      showView("preparar");$("#sec4").classList.remove("hidden");setStep(4);buildTabs();
+      ["A","B","C","D"].forEach(k=>{if(data[k]){setDot(k,"ok");render(k)}else{setDot(k,"");TABS.filter(t=>t[2]===k).forEach(([tid])=>$("#p-"+tid).innerHTML='<p class="muted">Esta parte não veio na aula compartilhada.</p>')}});
+      setTimeout(()=>$("#sec4").scrollIntoView({behavior:"smooth"}),200);
+      toast("Aula aberta! Você pode apresentar os slides.");
+    }catch(err){toast(err.message)}
+    b.textContent="📖 Abrir esta aula";
+  }
+};
+async function loadComs(id,box){
+  box.innerHTML='<div class="muted">Carregando…</div>';
+  try{
+    const j=await api("comentarios",{post_id:id});
+    box.innerHTML=j.comentarios.map(c=>`<div class="com"><b>${esc(c.autor)}</b>${c.igreja?` <span class="muted">· ${esc(c.igreja)}</span>`:""} <span class="muted">· ${esc(quando(c.criado))}</span>${c.pode_apagar?` <a href="#" data-cdel="${c.id}" class="muted" style="float:right">apagar</a>`:""}<div style="white-space:pre-wrap">${esc(c.texto)}</div></div>`).join("")+
+      `<form class="row" style="margin-top:8px;flex-wrap:nowrap"><input type="text" placeholder="Escreva um comentário…" maxlength="3000"><button class="btn sm" type="submit">Enviar</button></form>`;
+    box.querySelector("form").onsubmit=async ev=>{ev.preventDefault();const inp=box.querySelector("input");if(!inp.value.trim())return;try{await api("comentar",{post_id:id,texto:inp.value});loadComs(id,box);const btn=box.closest(".post").querySelector('[data-act="com"]');const n=(parseInt(btn.textContent.replace(/\D/g,""))||0)+1;btn.textContent=`💬 ${n} comentário${n===1?"":"s"}`}catch(err){toast(err.message)}};
+    box.querySelectorAll("[data-cdel]").forEach(a=>a.onclick=async ev=>{ev.preventDefault();try{await api("comentario_apagar",{id:+a.dataset.cdel});loadComs(id,box)}catch(err){toast(err.message)}});
+  }catch(e){box.innerHTML=`<div class="err">${esc(e.message)}</div>`}
+}
+$("#btnShare").onclick=()=>{
+  if(!data.A&&!data.C){toast("Gere a aula antes de compartilhar");return}
+  pendingAula={A:data.A,B:data.B,C:data.C,D:data.D,N:data.N||{}};
+  const A=data.A||{};
+  const resumo=["Objetivos:",...arr(A.objetivos).map(o=>"• "+o),"","Tópicos:",...arr(A.topicos).map((t,i)=>`${i+1}. ${t.titulo}`)].join("\n");
+  showView("sala");
+  openPostForm({tipo:"aula",titulo:A.titulo||"Aula preparada",licao:"",texto:"Preparei esta aula com o TEACHER EBD. Fiquem à vontade para usar!\n\n"+resumo});
+};
+
+// ---------- ADMIN ----------
+async function loadAdmin(){
+  $("#admList").innerHTML='<div class="loading"><div class="spinner"></div>Carregando…</div>';
+  try{
+    const j=await api("admin_usuarios");
+    $("#admList").innerHTML=`<table class="adm"><tr><th>Professor</th><th>Igreja</th><th>Publicações</th><th>Uso da IA (hoje / total)</th><th>Situação</th><th></th></tr>`+
+      j.usuarios.map(u=>`<tr><td><b>${esc(u.nome)}</b>${u.admin?' <span class="pill">admin</span>':""}<br><span class="muted">${esc(u.email)}</span></td><td>${esc(u.igreja||"")}</td><td>${u.posts}</td><td>${u.pedidos_hoje} / ${u.pedidos_total}</td><td>${u.ativo?"✅ Ativo":"⛔ Bloqueado"}</td>
+        <td>${u.id===me.id?'<span class="muted">você</span>':`<button class="btn sm sec" data-a="ativo" data-id="${u.id}" data-v="${u.ativo?0:1}">${u.ativo?"Bloquear":"Desbloquear"}</button> <button class="btn sm sec" data-a="senha" data-id="${u.id}">Nova senha</button>`}</td></tr>`).join("")+`</table>`;
+    $("#admList").querySelectorAll("button[data-a]").forEach(b=>b.onclick=async()=>{
+      try{
+        if(b.dataset.a==="ativo"){await api("admin_alterar",{id:+b.dataset.id,ativo:b.dataset.v==="1"});loadAdmin()}
+        if(b.dataset.a==="senha"){const r=await api("admin_nova_senha",{id:+b.dataset.id});b.outerHTML=`<span class="pill" style="font-size:.95rem">Nova senha: ${esc(r.senha)}</span>`}
+      }catch(err){toast(err.message)}
+    });
+  }catch(e){$("#admList").innerHTML=`<div class="err">${esc(e.message)}</div>`}
+}
+
+// ---------- EDIÇÃO ----------
+function modal(html){const m=document.createElement("div");m.className="modal";m.innerHTML=`<div class="card">${html}</div>`;document.body.appendChild(m);m.addEventListener("click",e=>{if(e.target===m)m.remove()});return m}
+function decorate(id,k){
+  const el=$("#p-"+id);if(!el||!data[k])return;
+  const nota=(data.N||{})[id]||"";
+  const t=document.createElement("div");t.className="tools";
+  t.innerHTML=`${nota?`<div class="nota"><b>📝 Minhas anotações</b><br>${esc(nota)}</div>`:""}
+    <div class="row"><button class="btn sm sec" data-x="nota">${nota?"✏️ Editar minhas anotações":"➕ Acrescentar algo meu"}</button><button class="btn sm sec" data-x="ia">✨ Melhorar com IA</button></div>`;
+  t.querySelector('[data-x="nota"]').onclick=()=>{
+    const m=modal(`<h3>Minhas anotações — ${esc((TABS.find(x=>x[0]===id)||[])[1]||"")}</h3><p class="muted">Escreva o que quiser acrescentar nesta parte: um exemplo, uma ilustração, um testemunho, uma pergunta extra…</p><textarea id="mN" style="min-height:180px">${esc(nota)}</textarea><div class="row" style="margin-top:10px"><button class="btn" id="mOk">Salvar</button><button class="btn sec" id="mX">Cancelar</button></div>`);
+    m.querySelector("#mX").onclick=()=>m.remove();
+    m.querySelector("#mOk").onclick=()=>{data.N=data.N||{};data.N[id]=m.querySelector("#mN").value.trim();m.remove();render(k);saveSoon();toast("Anotação salva")};
+  };
+  t.querySelector('[data-x="ia"]').onclick=()=>{
+    const m=modal(`<h3>✨ Melhorar com IA</h3><p class="muted">Diga o que você quer mudar nesta parte. Exemplos: “acrescente um exemplo para jovens”, “simplifique a linguagem”, “faça mais 3 perguntas de debate”, “crie um slide sobre a oração”.</p><textarea id="mI" style="min-height:110px" placeholder="O que você quer mudar?"></textarea><p id="mE" class="muted"></p><div class="row"><button class="btn" id="mOk">Aplicar</button><button class="btn sec" id="mX">Cancelar</button></div>`);
+    m.querySelector("#mX").onclick=()=>m.remove();
+    m.querySelector("#mOk").onclick=async()=>{
+      const pedido=m.querySelector("#mI").value.trim();if(!pedido)return;
+      const ok=m.querySelector("#mOk");ok.disabled=true;m.querySelector("#mE").textContent="A IA está ajustando… pode levar até 1 minuto.";
+      try{
+        const prompt=ctx()+`\n\nTAREFA\nEste é o material atual desta parte da aula, em JSON:\n${JSON.stringify(data[k])}\n\nPedido do professor: "${pedido}"\n\nAplique o pedido e devolva o JSON COMPLETO no MESMO formato (mesmas chaves), mantendo tudo o que não foi pedido para mudar.`;
+        const novo=parseJSON(await callAI([{role:"user",content:prompt}],10000));
+        data[k]=novo;m.remove();render(k);saveSoon();toast("Pronto! Parte atualizada.");
+      }catch(e){ok.disabled=false;m.querySelector("#mE").textContent=(e&&e.message)||"Não consegui aplicar. Tente de novo."}
+    };
+  };
+  el.appendChild(t);
+}
+window.__slideEdit=(i,after)=>{
+  const S=data.C.slides=arr(data.C.slides);const s=i>=0?S[i]:{titulo:"",pontos:[],ref:"",nota:""};
+  const m=modal(`<h3>${i>=0?"Editar slide "+(i+1):"Novo slide"}</h3>
+    <label>Título</label><input type="text" id="sT" value="${esc(s.titulo)}">
+    <label>Pontos (um por linha)</label><textarea id="sP" style="min-height:130px">${esc(arr(s.pontos).join("\n"))}</textarea>
+    <label>Referência bíblica (opcional)</label><input type="text" id="sR" value="${esc(s.ref||"")}">
+    <label>Nota do professor (aparece só para você na apresentação)</label><textarea id="sN" style="min-height:70px">${esc(s.nota||"")}</textarea>
+    <div class="row" style="margin-top:12px"><button class="btn" id="mOk">Salvar slide</button><button class="btn sec" id="mX">Cancelar</button></div>`);
+  m.querySelector("#mX").onclick=()=>m.remove();
+  m.querySelector("#mOk").onclick=()=>{
+    const ns={titulo:m.querySelector("#sT").value.trim()||"Sem título",pontos:m.querySelector("#sP").value.split("\n").map(x=>x.trim()).filter(Boolean),ref:m.querySelector("#sR").value.trim(),nota:m.querySelector("#sN").value.trim()};
+    if(i>=0)S[i]=ns;else if(typeof after==="number")S.splice(after+1,0,ns);else S.push(ns);
+    m.remove();render("C");saveSoon();toast("Slide salvo");
+  };
+};
+window.__slideMove=(i,d)=>{const S=arr(data.C.slides),j=i+d;if(j<0||j>=S.length)return;[S[i],S[j]]=[S[j],S[i]];render("C");saveSoon()};
+window.__slideDel=(i,b)=>{if(b.dataset.sure!=="1"){b.dataset.sure="1";b.textContent="Apagar?";return}data.C.slides.splice(i,1);render("C");saveSoon()};
+
+// ---------- SALVAR / MINHAS AULAS ----------
+function saveSoon(){clearTimeout(saveTimer);$("#saveState").textContent="Salvando…";saveTimer=setTimeout(saveAula,1200)}
+async function saveAula(){
+  if(!me||!(data.A||data.C))return;
+  try{
+    const j=await api("aula_salvar",{id:currentAulaId||0,titulo:(data.A&&data.A.titulo)||"Aula sem título",aula:{A:data.A,B:data.B,C:data.C,D:data.D,N:data.N||{}}});
+    currentAulaId=j.id;$("#saveState").textContent="💾 Salvo em Minhas aulas";
+  }catch(e){$("#saveState").textContent="⚠️ Não salvou: "+e.message}
+}
+async function loadMinhas(){
+  $("#minhasList").innerHTML='<div class="loading"><div class="spinner"></div>Carregando…</div>';
+  try{
+    const j=await api("aulas_minhas");
+    if(!j.aulas.length){$("#minhasList").innerHTML='<p class="muted">Você ainda não tem aulas salvas. Gere uma aula em “Preparar aula”.</p>';return}
+    $("#minhasList").innerHTML=j.aulas.map(a=>`<div class="qa row" style="justify-content:space-between"><div><b>${esc(a.titulo||"Aula")}</b><div class="muted" style="font-size:.85rem">Atualizada em ${esc(quando(a.atualizado))}</div></div><div class="row"><button class="btn sm" data-o="${a.id}">📖 Abrir</button><button class="btn sm sec" data-d="${a.id}">🗑️</button></div></div>`).join("");
+    $("#minhasList").querySelectorAll("[data-o]").forEach(b=>b.onclick=async()=>{
+      b.textContent="Abrindo…";
+      try{
+        const r=await api("aula_abrir",{id:+b.dataset.o});const a=r.aula||{};
+        data={A:a.A||null,B:a.B||null,C:a.C||null,D:a.D||null,N:a.N||{}};chatHist=[];lessonText="";currentAulaId=r.id;
+        showView("preparar");$("#sec4").classList.remove("hidden");setStep(4);buildTabs();
+        ["A","B","C","D"].forEach(k=>{if(data[k]){setDot(k,"ok");render(k)}else{setDot(k,"");TABS.filter(t=>t[2]===k).forEach(([tid])=>$("#p-"+tid).innerHTML='<p class="muted">Esta parte não foi gerada.</p>')}});
+        $("#saveState").textContent="💾 Salvo em Minhas aulas";
+        setTimeout(()=>$("#sec4").scrollIntoView({behavior:"smooth"}),200);
+      }catch(e){toast(e.message);b.textContent="📖 Abrir"}
+    });
+    $("#minhasList").querySelectorAll("[data-d]").forEach(b=>b.onclick=async()=>{
+      if(b.dataset.sure!=="1"){b.dataset.sure="1";b.textContent="Apagar?";return}
+      try{await api("aula_apagar",{id:+b.dataset.d});if(currentAulaId===+b.dataset.d)currentAulaId=null;loadMinhas()}catch(e){toast(e.message)}
+    });
+  }catch(e){$("#minhasList").innerHTML=`<div class="err">${esc(e.message)}</div>`}
+}
+
+// ---------- COPIAR ----------
+$("#copyAll").onclick=async()=>{
+  const A=data.A||{},B=data.B||{},C=data.C||{};const L=[];
+  L.push((A.titulo||"Aula").toUpperCase());
+  if(A.texto_aureo)L.push(`Texto áureo (${A.texto_aureo.ref}): ${A.texto_aureo.texto}`);
+  L.push("\nOBJETIVOS",...arr(A.objetivos).map(o=>"- "+o));
+  L.push("\nINTRODUÇÃO",A.introducao_impactante||"");
+  L.push("\nPLANO DA AULA",...arr(A.plano_aula).map(p=>`- ${p.minutos} min | ${p.etapa}: ${p.o_que_fazer}`));
+  L.push("\nTÓPICOS",...arr(A.topicos).map((t,i)=>`${i+1}. ${t.titulo} — ${t.resumo}`));
+  const c=A.contexto||{};L.push("\nCONTEXTO",`Autor: ${c.autor||""}`,`Destinatários: ${c.destinatarios||""}`,`Período: ${c.periodo||""}`,`Situação: ${c.situacao_politica||""}`,`Motivo: ${c.motivo||""}`);
+  L.push("\nPASSAGENS",...arr(B.passagens).map(p=>`${p.ref}: ${p.resumo}`));
+  L.push("\nAPLICAÇÕES",...arr(C.aplicacoes).map(a=>`- ${a.tema}: ${a.aplicacao}`));
+  const q=C.perguntas||{};L.push("\nPERGUNTAS",...[].concat(arr(q.compreensao),arr(q.reflexao),arr(q.debate)).map(x=>"- "+x.p));
+  L.push("\nCONCLUSÃO",C.conclusao||"","\nDESAFIO",C.desafio||"");
+  const N=data.N||{};const nk=Object.keys(N).filter(k=>N[k]);if(nk.length){L.push("\nMINHAS ANOTAÇÕES");nk.forEach(k=>{const t=TABS.find(x=>x[0]===k);L.push((t?t[1]:k)+": "+N[k])})}
+  try{await navigator.clipboard.writeText(L.join("\n"));toast("Roteiro copiado! Cole no Word ou WhatsApp.")}catch(e){toast("Não foi possível copiar neste navegador")}
+};
+})();
+</script>
+</body>
+</html>
