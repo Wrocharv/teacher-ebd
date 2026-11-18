@@ -9,5 +9,6 @@ Assistente de preparação de aulas da Escola Bíblica Dominical + Sala dos Prof
 - `config.exemplo.php` — modelo da configuração
 
 ## No servidor (não vai para o GitHub)
+Ficam na pasta `Guardar`, ao lado de `public_html` (fora do site):
 - `config.php` — chave da IA, código de convite e limites (copie de `config.exemplo.php`)
 - `dados/` — banco SQLite com contas, publicações e aulas salvas

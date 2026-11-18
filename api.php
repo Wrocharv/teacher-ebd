@@ -12,7 +12,22 @@ header('Cache-Control: no-store');
 @set_time_limit(300);
 date_default_timezone_set('America/Sao_Paulo');
 
-$config = require __DIR__ . '/config.php';
+// Pasta privada (fora do site): guarda config.php e a pasta dados.
+// Procura primeiro uma pasta irmã de public_html (mais seguro e não é apagada nas atualizações).
+function pastaPrivada() {
+    foreach (['/../Guardar', '/../guardar', '/../privado'] as $p) {
+        if (is_file(__DIR__ . $p . '/config.php')) return realpath(__DIR__ . $p);
+    }
+    return __DIR__;
+}
+define('PRIVADO', pastaPrivada());
+if (!is_file(PRIVADO . '/config.php')) {
+    header('Content-Type: application/json; charset=utf-8');
+    http_response_code(500);
+    echo json_encode(['error' => 'Arquivo config.php não encontrado. Ele deve ficar na pasta Guardar (ao lado de public_html).'], JSON_UNESCAPED_UNICODE);
+    exit;
+}
+$config = require PRIVADO . '/config.php';
 
 function responder($status, $dados) {
     http_response_code($status);
@@ -38,7 +53,7 @@ $acao = $_GET['acao'] ?? ($in['acao'] ?? '');
 function db() {
     static $pdo = null;
     if ($pdo) return $pdo;
-    $pasta = __DIR__ . '/dados';
+    $pasta = PRIVADO . '/dados';
     if (!is_dir($pasta)) @mkdir($pasta, 0755, true);
     if (!file_exists($pasta . '/.htaccess')) {
         @file_put_contents($pasta . '/.htaccess', "Require all denied\nDeny from all\n");
