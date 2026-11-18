@@ -306,7 +306,7 @@ const $=s=>document.querySelector(s);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const arr=a=>Array.isArray(a)?a:[];
 let pages=[];        // texto por página
-let pdfDoc=null;
+let pdfDoc=null;let autoIAfeito=false;
 let lessons=[];      // {n, page}
 let lessonText="";let srcText=false;
 let data={A:null,B:null,C:null,D:null,N:{}};let currentAulaId=null,saveTimer=null;
@@ -406,7 +406,7 @@ function loadFile(f){
   $("#pdfStatus").innerHTML='<div class="err">Formato não aceito. Envie PDF, Word (.docx) ou .txt.</div>';
 }
 function useText(t,label){
-  pdfDoc=null;
+  pdfDoc=null;autoIAfeito=false;
   t=String(t||"").replace(/\r/g,"").trim();
   if(t.length<200){$("#pdfStatus").innerHTML='<div class="err">O texto está muito curto. Confira se é a lição completa.</div>';return}
   // divide em "páginas" de ~3000 caracteres para permitir escolher a lição
@@ -438,7 +438,7 @@ async function loadPdf(f){
   st.textContent="Lendo o PDF…";
   try{
     const buf=await f.arrayBuffer();
-    const pdf=await pdfjsLib.getDocument({data:buf}).promise;pdfDoc=pdf;
+    const pdf=await pdfjsLib.getDocument({data:buf}).promise;pdfDoc=pdf;autoIAfeito=false;
     pages=[];srcText=false;
     for(let i=1;i<=pdf.numPages;i++){
       const p=await pdf.getPage(i);const tc=await p.getTextContent();
@@ -514,6 +514,7 @@ function detectLessons(){
   if(hint)$("#licaoInfo").textContent=hint.trim()+" "+$("#licaoInfo").textContent;
   $("#btnPaginas").classList.toggle("hidden",!pdfDoc);
   $("#btnIAlicoes").classList.toggle("hidden",pages.length<2);
+  if(pages.length>1&&lessons.some(l=>!l.ok)&&!autoIAfeito&&me){autoIAfeito=true;setTimeout(()=>$("#btnIAlicoes").click(),300)}
   $("#sec2").scrollIntoView({behavior:"smooth"});
 }
 function fillSelect(pickNext){
@@ -580,15 +581,15 @@ $("#btnPaginas").onclick=()=>{
   m.addEventListener("click",e=>{if(e.target===m){io.disconnect();m.remove()}});
 };
 $("#btnIAlicoes").onclick=async()=>{
-  const b=$("#btnIAlicoes");b.disabled=true;b.textContent="🔎 Procurando… (até 1 minuto)";
+  const b=$("#btnIAlicoes");b.disabled=true;b.textContent="🔎 Procurando as lições… (até 1 minuto)";$("#licaoInfo").textContent="Algumas lições não foram encontradas automaticamente. A IA está procurando… aguarde.";
   try{
     const resumo=pages.map((t,i)=>`[p${i+1}] `+t.replace(/\s+/g," ").slice(0,220)).join("\n");
     const prompt=`Abaixo está o começo de cada página de uma revista de Escola Bíblica Dominical (${$("#editora").value||""} ${$("#trimestre").value} ${$("#ano").value||""}). Identifique em qual página COMEÇA cada lição (a página de abertura da lição, não o sumário/índice nem menções a outras lições). Responda SOMENTE com JSON: {"licoes":[{"n":1,"pagina":0}]} — só as lições que você conseguir identificar.\n\n${resumo}`.slice(0,110000);
     const r=parseJSON(await callAI([{role:"user",content:prompt}],2000));
     let n=0;arr(r.licoes).forEach(x=>{const l=lessons.find(y=>y.n===+x.n);const pg=+x.pagina;if(l&&pg>=1&&pg<=pages.length){l.page=pg;l.ok=true;n++}});
     lessons.sort((a,b)=>a.n-b.n);
-    const hint=fillSelect(false);applyLesson();
-    $("#licaoInfo").textContent=`A IA localizou ${n} lições.`+hint+" "+$("#licaoInfo").textContent;
+    const hint=fillSelect(true);applyLesson();
+    $("#licaoInfo").textContent=`A IA localizou ${n} lições. `+hint.trim()+" "+$("#licaoInfo").textContent;
   }catch(e){toast(e.message||"Não consegui achar as lições")}
   b.disabled=false;b.textContent="🔎 Achar as lições com IA";
 };
